@@ -64,22 +64,16 @@ class Persona:
     """
     required_vars = []
     admissible_vars = []
-
     db = None
-    __dict = {}
 
     def __init__(self, **kwargs):
-        self.__dict.update(kwargs)
-        
+        self.__dict__.update(kwargs)
+
     def save(self):
         
         pass
 
-    def borradoTmp(self):
-        "Funcion temporal, no es necesaria"
-        self.db.delete_many({})
-
-    def change(self, **kwargs):
+    def set(self, **kwargs):
 
         pass 
     
@@ -87,7 +81,7 @@ class Persona:
     def find(cls, query):
         """ Devuelve un cursor de modelos        
         """ 
-        
+
         pass
 
     @classmethod
@@ -100,23 +94,32 @@ class Persona:
         """
         cls.db = db
 
+        with open(vars_path, "r") as f:
+            cls.required_vars.append(f.readlines(1))
+            cls.admissible_vars.append(f.readlines(1))
+        cls.required_vars = cls.required_vars[0][0].split(',')
+        cls.admissible_vars = cls.admissible_vars[0][0].split(',')
+
+        # funcion map para deshacerse del '\n' de la primera linea 
+        cls.required_vars = list(map(str.strip,cls.required_vars))
+        print(cls.required_vars)
+        print(cls.admissible_vars)        
+
 # Q1: Listado de todas las compras de un cliente
 nombre = "Definir"
 Q1 = []
-
-# Q2: etc...
-
-"""
-    Test main - getCityGeoJSON(address) 
-    -------------------------------------
-    geoJson = getCityGeoJSON("175 5th Avenue NYC")
-    print(geoJson)
-"""
+Q2 = []
+Q3 = []
+Q4 = []
+Q5 = []
+Q6 = []
+Q7 = []
 
 if __name__ == '__main__':
     client = MongoClient()
     db = client.test.personas
     persona = Persona()
-    persona.init_class(db)
+    persona.init_class(db,"vars.txt")
+    persona.set()
     
     
