@@ -1,7 +1,8 @@
 __author__ = 'Alvaro_Jimenez_&_Ivan_Zabaleta'
 
 from pymongo import MongoClient
-import json
+from pymongo.command_cursor import CommandCursor
+from geojson import Point
 
 def getCityGeoJSON(address):
     """ Devuelve las coordenadas de una direcciion a partir de un str de la direccion
@@ -12,11 +13,12 @@ def getCityGeoJSON(address):
         (str) -- GeoJSON
     """
     from geopy.geocoders import Nominatim
-    geolocator = Nominatim()
+    geolocator = Nominatim(user_agent="RedES")
     location = geolocator.geocode(address)
-    #TODO
+    
     # Devolver GeoJSON de tipo punto con la latitud y longitud almacenadas
     # en las variables location.latitude y location.longitude
+    return Point((location.latitude, location.longitude))
 
 class ModelCursor:
     """ Cursor para iterar sobre los documentos del resultado de una
@@ -32,20 +34,26 @@ class ModelCursor:
             command_cursor (CommandCursor) -- Cursor de pymongo
         """
         #TODO
-        pass #No olvidar eliminar esta li__dictnea una vez implementado
+
+
+        pass 
     
     def next(self):
         """ Devuelve el siguiente documento en forma de modelo
         """
-        #TODO
-        pass #No olvidar eliminar esta linea una vez implementado
+        # TODO
+        # command_cursor.next()
+        
+        pass 
 
     @property
     def alive(self):
         """True si existen más modelos por devolver, False en caso contrario
         """
         #TODO
-        pass #No olvidar eliminar esta linea una vez implementado
+        # command_cursor.alive()
+
+        pass 
 
 class Persona:
     """ Prototipo de la clase modelo
@@ -56,42 +64,31 @@ class Persona:
     """
     required_vars = []
     admissible_vars = []
+
     db = None
-    __dict = {"nombre": {"nombre": "Adrián", "apellido": "Valiente"}, "telefonos": [639861561, 691078391],"ciudad": "Huelva", "estudios": [{"universidad": "USAL", "inicio": "19/04/2012", "final": "24/03/2005"},{"universidad": "USAL", "inicio": "13/09/2011", "final": "17/03/2002"}],"trabajo": [{"empresa": "UPM", "inicio": "28/09/2018", "final": "21/07/2005"},{"empresa": "UPM", "inicio": "12/05/2005", "final": "08/05/2007"}]}
+    __dict = {}
 
     def __init__(self, **kwargs):
         self.__dict.update(kwargs)
         
     def save(self):
-        if(db.find_one(self.__dict)):
-            print("Existe")
-            db.update(self.__dict)
-        else:
-            print("No existe")
-            db.insert_one(self.__dict)
-
-        for x in db.find():
-            print(x)
+        
+        pass
 
     def borradoTmp(self):
         "Funcion temporal, no es necesaria"
         self.db.delete_many({})
 
     def change(self, **kwargs):
-        """
-        with open('redES.json') as file:
-            __dict = json.load(file)
-        db.insert_many(__dict)
-        """
 
-        pass #No olvidar eliminar esta linea una vez implementado
+        pass 
     
     @classmethod
     def find(cls, query):
         """ Devuelve un cursor de modelos        
         """ 
-
-        pass #No olvidar eliminar esta linea una vez implementado
+        
+        pass
 
     @classmethod
     def init_class(cls, db, vars_path="persona.vars"):
@@ -109,9 +106,17 @@ Q1 = []
 
 # Q2: etc...
 
+"""
+    Test main - getCityGeoJSON(address) 
+    -------------------------------------
+    geoJson = getCityGeoJSON("175 5th Avenue NYC")
+    print(geoJson)
+"""
+
 if __name__ == '__main__':
     client = MongoClient()
     db = client.test.personas
     persona = Persona()
     persona.init_class(db)
-    persona.save()
+    
+    
