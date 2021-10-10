@@ -1,2 +1,2 @@
 nombre,apellido
-telefono,ciudad,estudios,universidad,inicio,fin
+telefono,ciudad,estudios

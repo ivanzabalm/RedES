@@ -48,9 +48,8 @@ class ModelCursor:
     def alive(self):
         """True si existen más modelos por devolver, False en caso contrario
         """
-        #TODO
-        # command_cursor.alive()
 
+        # command_cursor.alive()
         pass 
 
 class Persona:
@@ -68,11 +67,46 @@ class Persona:
         self.__dict__.update(kwargs)
 
     def save(self):
-        
-        pass
+        print(self.__dict__)
 
     def set(self, **kwargs):
-        self.__dict__.update(kwargs)
+        valido = True
+
+        # En caso de que el diccionario este vacio
+        if not(bool(self.__dict__)):
+            # Comprobacion de variables requeridas.
+            for n in self.required_vars:
+                if not (kwargs.get(n)):
+                    valido = False
+                    print("Error: el documento no contiene las variables requeridas.")
+
+            if(valido):
+                # Comprobacion de variables admitidas.
+                for n in kwargs:
+                    if(n != "nombre" and n != "apellido"):
+                        if not n in self.admissible_vars:
+                            valido = False
+                            print("Error: el documento contiene una o varias variables no admitidas.")
+        else:
+            # Comprobacion de variables admitidas.
+            for n in kwargs:
+                if(n != "nombre" and n != "apellido"):
+                    if not n in self.admissible_vars:
+                        valido = False
+                        print("Error: el documento contiene una o varias variables no admitidas.")
+
+        # En caso de que las comprobaciones sean exitosas se almacenara en el diccionario de la clase.
+        if(valido):
+            if not(bool(self.__dict__)):
+                self.__dict__.update(kwargs)
+            else:
+                if(self.__dict__ != kwargs):
+                    for n in kwargs:
+                        if n in self.__dict__:
+                            if(self.__dict__[n] != kwargs[n]):
+                                self.__dict__[n] = kwargs[n]
+                        else:
+                            self.__dict__[n] = kwargs[n]
 
     @classmethod
     def find(cls, query):
@@ -100,7 +134,6 @@ class Persona:
         # funcion map para deshacerse del '\n' de la primera linea 
         cls.required_vars = list(map(str.strip,cls.required_vars))      
 
-personas = []
 personasJSON = [
     {
         "nombre": "Julian",
@@ -184,25 +217,26 @@ Q5 = []
 Q6 = []
 Q7 = []
 
+ej1 = {
+    "nombre": "Julian",
+    "apellido": "Fernandez",
+    "telefono" : 674165642,
+    "ciudad" : "Madrid"
+}
+
+ej2 = {
+    "telefono" : 1231123,
+    "ciudad" : "Paris",
+    "estudios": {"universidad": "UPM", "inicio": "19/04/2012", "final": "24/03/2005"}
+}
+
 if __name__ == '__main__':
     client = MongoClient()
     db = client.test.personas
     
     p1 = Persona()
     p1.init_class(db,"vars.txt")
-    p1.set(**personasJSON[0])
-
-    p2 = Persona()
-    p2.init_class(db,"vars.txt")
-    p2.set(**personasJSON[1])
-
-    p3 = Persona()
-    p3.init_class(db,"vars.txt")
-    p3.set(**personasJSON[2])
-
-    personas.append(p1)
-    personas.append(p2)
-    personas.append(p3)
-
-    for obj in personas:
-        print(obj.__dict__)
+    p1.set(**ej1)
+    p1.save()
+    p1.set(**ej2)
+    p1.save()
