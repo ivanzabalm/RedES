@@ -67,7 +67,7 @@ class Persona:
         self.__dict__.update(kwargs)
 
     def save(self):
-        qr = {"nombre":self.__dict__.get('nombre'),"apellido":self.__dict__.get('apellido')} #identificar
+        qr = {"telefono":self.__dict__.get('telefono')} #identificar
         qper = self.db.find(qr,{"_id":0})#no salga el id
 
         for persona in qper:
@@ -107,14 +107,14 @@ class Persona:
             if(valido):
                 # Comprobacion de variables admitidas.
                 for n in kwargs:
-                    if(n != "nombre" and n != "apellido"):
+                    if(n != "nombre" and n != "apellido" and n != "telefono"):
                         if not n in self.admissible_vars:
                             valido = False
                             print("Error: el documento contiene una o varias variables no admitidas.")
         else:
             # Comprobacion de variables admitidas.
             for n in kwargs:
-                if(n != "nombre" and n != "apellido"):
+                if(n != "nombre" and n != "apellido" and n != "telefono"):
                     if not n in self.admissible_vars:
                         valido = False
                         print("Error: el documento contiene una o varias variables no admitidas.")
@@ -158,8 +158,10 @@ class Persona:
 
             cls.required_vars = cls.required_vars[0][0].split(',')
             cls.admissible_vars = cls.admissible_vars[0][0].split(',')  
+            
             # funcion map para deshacerse del '\n' de la primera linea 
-            cls.required_vars = list(map(str.strip,cls.required_vars))     
+            cls.required_vars = list(map(str.strip,cls.required_vars))
+            cls.admissible_vars = list(map(str.strip,cls.admissible_vars))
 
 personasJSON = [
     {
@@ -250,7 +252,8 @@ if __name__ == '__main__':
    
     i=0
     for n in listaPersonas:
-        n.init_class(db,"vars.txt")
+        n.init_class(db,"vars-persona.txt")
         n.set(**personasJSON[i])
         n.save()
         i += 1
+    
