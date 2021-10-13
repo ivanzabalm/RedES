@@ -67,9 +67,9 @@ class Persona:
         self.__dict__.update(kwargs)
 
     def save(self):
-        
-        qr = {"nombre":self.__dict__.get('nombre'),"apellido":self.__dict__.get('apellido')}#identificar
+        qr = {"nombre":self.__dict__.get('nombre'),"apellido":self.__dict__.get('apellido')} #identificar
         qper = self.db.find(qr,{"_id":0})#no salga el id
+
         for persona in qper:
             ins = {} #se guardan las que se van a actualizar
 
@@ -92,9 +92,6 @@ class Persona:
             for we in self.__dict__.keys():
                 ert[we] = self.__dict__.get(we)
             db.insert_one(ert)#si no existe introduce uno nuevo
-
-        
-        
 
     def set(self, **kwargs):
         valido = True
@@ -150,17 +147,19 @@ class Persona:
             vars_path (str) -- ruta al archivo con la definicion de variables
             del modelo.
         """
-        cls.db = db
 
-        with open(vars_path, "r") as f:
-            cls.required_vars.append(f.readlines(1))
-            cls.admissible_vars.append(f.readlines(1))
-        cls.required_vars = cls.required_vars[0][0].split(',')
-        cls.admissible_vars = cls.admissible_vars[0][0].split(',')
+        if not (cls.db):
+            cls.db = db
 
-        # funcion map para deshacerse del '\n' de la primera linea 
-        cls.required_vars = list(map(str.strip,cls.required_vars))     
+        if not (bool(cls.required_vars) or bool(cls.admissible_vars)):
+            with open(vars_path, "r") as f:
+                cls.required_vars.append(f.readlines(1))
+                cls.admissible_vars.append(f.readlines(1))
 
+            cls.required_vars = cls.required_vars[0][0].split(',')
+            cls.admissible_vars = cls.admissible_vars[0][0].split(',')  
+            # funcion map para deshacerse del '\n' de la primera linea 
+            cls.required_vars = list(map(str.strip,cls.required_vars))     
 
 personasJSON = [
     {
@@ -211,7 +210,6 @@ personasJSON = [
         "apellido": "Rayo",
         "telefono" : 609304424,
         "ciudad" : "Sevilla",
-        "universidad" : "UAM",
         "estudios": {"universidad": "UPM", "inicio": "02/06/2002", "final": "06/11/2016"}
     },
     {
@@ -226,7 +224,7 @@ personasJSON = [
         "apellido": "Colmenero",
         "telefono" : 691999884,
         "ciudad" : "Bilbao",
-        "estudios": {"universidad": "UAM", "inicio": "30/08/2017", "final": "15/03/2001"}
+        "estudios": {"unPedroiversidad": "UAM", "inicio": "30/08/2017", "final": "15/03/2001"}
     },
     {
         "nombre": "Luis",
@@ -245,35 +243,14 @@ Q5 = []
 Q6 = []
 Q7 = []
 
-ej1 = {
-    "nombre": "Javier",
-    "apellido": "Cortes",
-    "telefono" : 622222223
-    
-}
-
-ej3 = {
-    "nombre": "Julian",
-    "apellido": "sdjfoidsf",
-    "telefono" : 674165642,
-    "ciudad" : "barcelona"
-}
-
-ej2 = {
-    "telefono" : 1231123,
-    "ciudad" : "Paris",
-    "estudios": {"universidad": "UPM", "inicio": "19/04/2012", "final": "24/03/2005"}
-}
-
 if __name__ == '__main__':
     client = MongoClient()
     db = client.test.personas
-    
-    p1 = Persona()
-    p1.init_class(db,"vars.txt")
-    p1.set(**ej1)
-
-    p1.save()
-    # p1.set(**ej3)
-    # p1.save()
-    
+    listaPersonas = [Persona() for i in range(10)]
+   
+    i=0
+    for n in listaPersonas:
+        n.init_class(db,"vars.txt")
+        n.set(**personasJSON[i])
+        n.save()
+        i += 1
