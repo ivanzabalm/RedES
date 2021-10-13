@@ -67,7 +67,34 @@ class Persona:
         self.__dict__.update(kwargs)
 
     def save(self):
-        print(self.__dict__)
+        
+        qr = {"nombre":self.__dict__.get('nombre'),"apellido":self.__dict__.get('apellido')}#identificar
+        qper = self.db.find(qr,{"_id":0})#no salga el id
+        for persona in qper:
+            ins = {} #se guardan las que se van a actualizar
+
+            l1 = set(persona.keys())
+            l2 = set(self.__dict__.keys())
+            resl = list(sorted(l2-l1))#busca las que se necesitan actualizar
+
+            if len(resl) > 0:
+                for p in resl:
+                    ins[p] = self.__dict__.get(p)#coge las que necesita actualizar
+            
+            for k in persona.keys():
+                if self.__dict__.get(k) != persona[k]:
+                    ins[k] = self.__dict__.get(k)#cambia las que necesitan actualizar
+            
+            db.update_one(qr,{"$set":ins})
+
+        if qper.count() == 0:
+            ert = {}
+            for we in self.__dict__.keys():
+                ert[we] = self.__dict__.get(we)
+            db.insert_one(ert)#si no existe introduce uno nuevo
+
+        
+        
 
     def set(self, **kwargs):
         valido = True
@@ -132,7 +159,8 @@ class Persona:
         cls.admissible_vars = cls.admissible_vars[0][0].split(',')
 
         # funcion map para deshacerse del '\n' de la primera linea 
-        cls.required_vars = list(map(str.strip,cls.required_vars))      
+        cls.required_vars = list(map(str.strip,cls.required_vars))     
+
 
 personasJSON = [
     {
@@ -218,10 +246,17 @@ Q6 = []
 Q7 = []
 
 ej1 = {
+    "nombre": "Javier",
+    "apellido": "Cortes",
+    "telefono" : 622222223
+    
+}
+
+ej3 = {
     "nombre": "Julian",
-    "apellido": "Fernandez",
+    "apellido": "sdjfoidsf",
     "telefono" : 674165642,
-    "ciudad" : "Madrid"
+    "ciudad" : "barcelona"
 }
 
 ej2 = {
@@ -237,6 +272,8 @@ if __name__ == '__main__':
     p1 = Persona()
     p1.init_class(db,"vars.txt")
     p1.set(**ej1)
+
     p1.save()
-    p1.set(**ej2)
-    p1.save()
+    # p1.set(**ej3)
+    # p1.save()
+    
