@@ -53,22 +53,19 @@ class ModelCursor:
         pass 
 
 class Persona:
-    """ Prototipo de la clase modelo
-        Copiar y pegar tantas veces como modelos se deseen crear (cambiando
-        el nombre Model, por la entidad correspondiente), o bien crear tantas
-        clases como modelos se deseen que hereden de esta clase. Este segundo 
-        metodo puede resultar mas compleja
-    """
     required_vars = []
     admissible_vars = []
     db = None
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
+    
+    def print(self):
+        print(self.__dict__,"\n")
 
     def save(self):
-        qr = {"telefono":self.__dict__.get('telefono')} #identificar
-        qper = self.db.find(qr,{"_id":0})#no salga el id
+        qr = {"telefono":self.__dict__.get('telefono')} # identificar
+        qper = self.db.find(qr,{"_id":0}) # no salga el id
 
         for persona in qper:
             ins = {} #se guardan las que se van a actualizar
@@ -104,22 +101,18 @@ class Persona:
                     valido = False
                     print("Error: el documento no contiene las variables requeridas.")
 
-            if(valido):
-                # Comprobacion de variables admitidas.
-                for n in kwargs:
-                    if(n != "nombre" and n != "apellido" and n != "telefono"):
-                        if not n in self.admissible_vars:
-                            valido = False
-                            print("Error: el documento contiene una o varias variables no admitidas.")
-        else:
+        if(valido):
+            
+            # TODO
+            # Coger solo las variables admitidas y comprobar que son validas
+
             # Comprobacion de variables admitidas.
             for n in kwargs:
-                if(n != "nombre" and n != "apellido" and n != "telefono"):
-                    if not n in self.admissible_vars:
-                        valido = False
-                        print("Error: el documento contiene una o varias variables no admitidas.")
+                if not n in self.admissible_vars:
+                    valido = False
+                    print("Error: el documento contiene una o varias variables no admitidas.")
 
-        # En caso de que las comprobaciones sean exitosas se almacenara en el diccionario de la clase.
+        # En caso de que las comprobaciones sean exitosas se almacenara en el diccionario de la clase
         if(valido):
             if not(bool(self.__dict__)):
                 self.__dict__.update(kwargs)
@@ -147,21 +140,19 @@ class Persona:
             vars_path (str) -- ruta al archivo con la definicion de variables
             del modelo.
         """
+        cls.db = db
 
-        if not (cls.db):
-            cls.db = db
+        with open(vars_path, "r") as f:
+            listReqVars = f.readlines(1)
+            listAdmVars = f.readlines(1)
 
-        if not (bool(cls.required_vars) or bool(cls.admissible_vars)):
-            with open(vars_path, "r") as f:
-                cls.required_vars.append(f.readlines(1))
-                cls.admissible_vars.append(f.readlines(1))
+        # Para deshacerse de los "\n" y reformar la lista con cada una de las variables ordenadas.
+        listReqVars = list(map(str.strip,listReqVars))[0].split(",")
+        listAdmVars = list(map(str.strip,listAdmVars))[0].split(",")
 
-            cls.required_vars = cls.required_vars[0][0].split(',')
-            cls.admissible_vars = cls.admissible_vars[0][0].split(',')  
-            
-            # funcion map para deshacerse del '\n' de la primera linea 
-            cls.required_vars = list(map(str.strip,cls.required_vars))
-            cls.admissible_vars = list(map(str.strip,cls.admissible_vars))
+        # Aplicando la diferencia de la teoria de conjuntos (B-A) le aplicamos las nuevas variables,
+        cls.required_vars.extend(list(set(listReqVars) - set(cls.required_vars)))
+        cls.admissible_vars.extend(list(set(listAdmVars) - set(cls.admissible_vars)))
 
 personasJSON = [
     {
@@ -226,7 +217,7 @@ personasJSON = [
         "apellido": "Colmenero",
         "telefono" : 691999884,
         "ciudad" : "Bilbao",
-        "estudios": {"unPedroiversidad": "UAM", "inicio": "30/08/2017", "final": "15/03/2001"}
+        "estudios": {"universidad": "UAM", "inicio": "30/08/2017", "final": "15/03/2001"}
     },
     {
         "nombre": "Luis",
@@ -254,6 +245,5 @@ if __name__ == '__main__':
     for n in listaPersonas:
         n.init_class(db,"vars-persona.txt")
         n.set(**personasJSON[i])
-        n.save()
+        n.print()
         i += 1
-    

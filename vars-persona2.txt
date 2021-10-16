@@ -1,0 +1,2 @@
+nombre,apellido,telefono,nueva_req
+ciudad,estudios,ejemplo1,ejemplo2
