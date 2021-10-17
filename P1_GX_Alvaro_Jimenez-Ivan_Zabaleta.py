@@ -60,6 +60,7 @@ class Persona:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
     
+    # Metodo para testing (borrar al acabar)
     def print(self):
         print(self.__dict__,"\n")
 
@@ -69,7 +70,6 @@ class Persona:
 
         for persona in qper:
             ins = {} #se guardan las que se van a actualizar
-
             l1 = set(persona.keys())
             l2 = set(self.__dict__.keys())
             resl = list(sorted(l2-l1))#busca las que se necesitan actualizar
@@ -93,25 +93,19 @@ class Persona:
     def set(self, **kwargs):
         valido = True
 
-        # En caso de que el diccionario este vacio
-        if not(bool(self.__dict__)):
-            # Comprobacion de variables requeridas.
-            for n in self.required_vars:
-                if not (kwargs.get(n)):
-                    valido = False
-                    print("Error: el documento no contiene las variables requeridas.")
+        # Comprobacion de variables requeridas
+        for n in self.required_vars:
+            if not (kwargs.get(n)):
+                valido = False
+                print("Error: el documento no contiene las variables requeridas.")
 
-        if(valido):
-            
-            # TODO
-            # Coger solo las variables admitidas y comprobar que son validas
-
-            # Comprobacion de variables admitidas.
-            for n in kwargs:
+        # Comprobacion de variables admitidas.
+        for n in kwargs:
+            if not n in self.required_vars:
                 if not n in self.admissible_vars:
                     valido = False
                     print("Error: el documento contiene una o varias variables no admitidas.")
-
+                
         # En caso de que las comprobaciones sean exitosas se almacenara en el diccionario de la clase
         if(valido):
             if not(bool(self.__dict__)):
@@ -186,7 +180,7 @@ personasJSON = [
     {
         "nombre": "Alberto",
         "apellido": "Rayo",
-        "telefono" : 660706957,
+        "telefono" : 685646527,
         "ciudad" : "Santander",
         "estudios": {"universidad": "UAM", "inicio": "19/04/2012", "final": "24/03/2005"}
 
@@ -215,7 +209,7 @@ personasJSON = [
     {
         "nombre": "Teresa",
         "apellido": "Colmenero",
-        "telefono" : 691999884,
+        "telefono" : 669567032,
         "ciudad" : "Bilbao",
         "estudios": {"universidad": "UAM", "inicio": "30/08/2017", "final": "15/03/2001"}
     },
@@ -245,5 +239,5 @@ if __name__ == '__main__':
     for n in listaPersonas:
         n.init_class(db,"vars-persona.txt")
         n.set(**personasJSON[i])
-        n.print()
+        n.save()
         i += 1
