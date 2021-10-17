@@ -1,5 +1,6 @@
 __author__ = 'Alvaro_Jimenez_&_Ivan_Zabaleta'
 
+import time
 from pymongo import MongoClient
 from pymongo.command_cursor import CommandCursor
 from geojson import Point
@@ -33,14 +34,13 @@ class ModelCursor:
             documento que se itera.
             command_cursor (CommandCursor) -- Cursor de pymongo
         """
-        
+
         # command_cursor = CommandCursor()
         pass 
     
     def next(self):
         """ Devuelve el siguiente documento en forma de modelo
         """
-        
         # command_cursor.next()
         pass 
 
@@ -48,7 +48,6 @@ class ModelCursor:
     def alive(self):
         """True si existen más modelos por devolver, False en caso contrario
         """
-
         # command_cursor.alive()
         pass 
 
@@ -59,28 +58,24 @@ class Persona:
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
-    
-    # Metodo para testing (borrar al acabar)
-    def print(self):
-        print(self.__dict__,"\n")
 
     def save(self):
         qr = {"telefono":self.__dict__.get('telefono')} # identificar
         qper = self.db.find(qr,{"_id":0}) # no salga el id
 
         for persona in qper:
-            ins = {} #se guardan las que se van a actualizar
+            ins = {} # Se guardan las que se van a actualizar.
             l1 = set(persona.keys())
             l2 = set(self.__dict__.keys())
-            resl = list(sorted(l2-l1))#busca las que se necesitan actualizar
+            resl = list(sorted(l2-l1)) # Busca las que se necesitan actualizar.
 
             if len(resl) > 0:
                 for p in resl:
-                    ins[p] = self.__dict__.get(p)#coge las que necesita actualizar
+                    ins[p] = self.__dict__.get(p) # Coge las que necesita actualizar.
             
             for k in persona.keys():
                 if self.__dict__.get(k) != persona[k]:
-                    ins[k] = self.__dict__.get(k)#cambia las que necesitan actualizar
+                    ins[k] = self.__dict__.get(k) # Cambia las que necesitan actualizar.
             
             db.update_one(qr,{"$set":ins})
 
@@ -88,12 +83,12 @@ class Persona:
             ert = {}
             for we in self.__dict__.keys():
                 ert[we] = self.__dict__.get(we)
-            db.insert_one(ert)#si no existe introduce uno nuevo
+            db.insert_one(ert) # Si no existe introduce uno nuevo.
 
     def set(self, **kwargs):
         valido = True
 
-        # Comprobacion de variables requeridas
+        # Comprobacion de variables requeridas.
         for n in self.required_vars:
             if not (kwargs.get(n)):
                 valido = False
@@ -106,7 +101,7 @@ class Persona:
                     valido = False
                     print("Error: el documento contiene una o varias variables no admitidas.")
                 
-        # En caso de que las comprobaciones sean exitosas se almacenara en el diccionario de la clase
+        # En caso de que las comprobaciones sean exitosas se almacenara en el diccionario de la clase.
         if(valido):
             if not(bool(self.__dict__)):
                 self.__dict__.update(kwargs)
@@ -118,6 +113,9 @@ class Persona:
                                 self.__dict__[n] = kwargs[n]
                         else:
                             self.__dict__[n] = kwargs[n]
+
+            # Añadimos el geoJson de tipo punto al documento
+            self.__dict__["geolocalizacion"] = getCityGeoJSON(self.__dict__.get("ciudad"))
 
     @classmethod
     def find(cls, query):
@@ -144,7 +142,7 @@ class Persona:
         listReqVars = list(map(str.strip,listReqVars))[0].split(",")
         listAdmVars = list(map(str.strip,listAdmVars))[0].split(",")
 
-        # Aplicando la diferencia de la teoria de conjuntos (B-A) le aplicamos las nuevas variables,
+        # Aplicando la diferencia de la teoria de conjuntos (B-A) le aplicamos las nuevas variables.
         cls.required_vars.extend(list(set(listReqVars) - set(cls.required_vars)))
         cls.admissible_vars.extend(list(set(listAdmVars) - set(cls.admissible_vars)))
 
@@ -174,7 +172,7 @@ personasJSON = [
         "nombre": "Carmen",
         "apellido": "Cortes",
         "telefono" : 629755914,
-        "ciudad" : "Barcelona",
+        "ciudad" : "Huelva",
         "estudios": {"universidad": "UPM", "inicio": "19/04/2012", "final": "24/03/2005"}
     },
     {
@@ -189,7 +187,7 @@ personasJSON = [
         "nombre": "Pedro",
         "apellido": "Diéguez",
         "telefono" : 660706957,
-        "ciudad" : "Santander",
+        "ciudad" : "Huelva",
         "estudios": {"universidad": "UAM", "inicio": "19/04/2012", "final": "24/03/2005"}
     },
     {
@@ -240,4 +238,11 @@ if __name__ == '__main__':
         n.init_class(db,"vars-persona.txt")
         n.set(**personasJSON[i])
         n.save()
+        time.sleep(0.5)
         i += 1
+    
+    Q1 = db.find({"ciudad": "Huelva"})
+
+    print("Resultado de la Q1:")
+    for x in Q1:
+        print(x)  
