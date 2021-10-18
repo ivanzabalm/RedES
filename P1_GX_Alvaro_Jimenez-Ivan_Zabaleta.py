@@ -34,22 +34,20 @@ class ModelCursor:
             documento que se itera.
             command_cursor (CommandCursor) -- Cursor de pymongo
         """
-
-        # command_cursor = CommandCursor()
-        pass 
+        self.clase = model_class
+        self.cursor = command_cursor
+        
     
     def next(self):
         """ Devuelve el siguiente documento en forma de modelo
         """
-        # command_cursor.next()
-        pass 
+        return self.clase(**self.cursor.next())
 
     @property
     def alive(self):
         """True si existen más modelos por devolver, False en caso contrario
         """
-        # command_cursor.alive()
-        pass 
+        return self.cursor.alive
 
 class Persona:
     required_vars = []
@@ -121,8 +119,7 @@ class Persona:
     def find(cls, query):
         """ Devuelve un cursor de modelos        
         """ 
-
-        pass
+        return ModelCursor(cls,cls.db.find(query))
 
     @classmethod
     def init_class(cls, db, vars_path="persona.vars"):
