@@ -251,9 +251,9 @@ class Centro:
         qr = {"ID":self.__dict__.get('ID')} # identificar
         qcen = self.db.find(qr,{"_id":0}) # no salga el id
 
-        for empresa in qcen:
+        for centro in qcen:
             ins = {} # Se guardan las que se van a actualizar.
-            l1 = set(empresa.keys())
+            l1 = set(centro.keys())
             l2 = set(self.__dict__.keys())
             resl = list(sorted(l2-l1)) # Busca las que se necesitan actualizar.
 
@@ -261,8 +261,8 @@ class Centro:
                 for p in resl:
                     ins[p] = self.__dict__.get(p) # Coge las que necesita actualizar.
             
-            for k in empresa.keys():
-                if self.__dict__.get(k) != empresa[k]:
+            for k in centro.keys():
+                if self.__dict__.get(k) != centro[k]:
                     ins[k] = self.__dict__.get(k) # Cambia las que necesitan actualizar.
             
             db.update_one(qr,{"$set":ins})
@@ -416,35 +416,30 @@ personasJSON = [
 
 empresasJSON = [
     {
-        "ID": 1,
         "nombre": "McDonalds",
         "sector" : "Comida",
         "ciudad" : "Madrid",
         "ceo": "Sech"
     },
     {
-        "ID": 2,
         "nombre": "Nike",
         "sector" : "Ropa",
         "ciudad" : "Barcelona",
         "ceo": "Myke"
     },
     {
-        "ID": 3,
         "nombre": "Adidas",
         "sector" : "Ropa",
         "ciudad" : "Alicante",
         "ceo": "Ivan"
     },
     {
-        "ID": 4,
         "nombre": "Apple",
         "sector" : "Tecnologia",
         "ciudad" : "Paris",
         "ceo": "Steve"
     },
     {
-        "ID": 5,
         "nombre": "Samsung",
         "sector" : "Tecnologia",
         "ciudad" : "Sevilla",
@@ -452,35 +447,30 @@ empresasJSON = [
 
     },
     {
-        "ID": 6,
         "nombre": "FIFA",
         "sector" : "Deporte",
         "ciudad" : "Londres",
         "ceo": "Iniesta"
     },
     {
-        "ID": 7,
         "nombre": "Burguer King",
         "sector" : "Comida",
         "ciudad" : "Valencia",
         "ceo": "Gordo"
     },
     {
-        "ID": 8,
         "nombre": "Riot Games",
         "sector" : "Videojuegos",
         "ciudad" : "Roma",
         "ceo": "Teemo"
     },
     {
-        "ID": 9,
         "nombre": "JBL",
         "sector" : "Musica",
         "ciudad" : "Amsterdam",
         "ceo": "Stormzy"
     },
     {
-        "ID": 10,
         "nombre": "BOSE",
         "sector" : "Musica",
         "ciudad" : "Brasil",
@@ -490,35 +480,30 @@ empresasJSON = [
 
 centrosJSON = [
     {
-        "ID": 1,
         "universidad": "U-tad",
         "carrera" : "INSO",
         "ciudad" : "Madrid",
         "alumnos": 15890
     },
     {
-        "ID": 2,
         "universidad": "CEU",
         "carrera" : "ADE",
         "ciudad" : "Madrid",
         "alumnos": 32341
     },
     {
-        "ID": 3,
         "universidad": "UA",
         "carrera" : "Derecho",
         "ciudad" : "Alicante",
         "alumnos": 20000
     },
     {
-        "ID": 4,
         "universidad": "UV",
         "carrera" : "Arquitectura",
         "ciudad" : "Valencia",
         "alumnos": 64483
     },
     {
-        "ID": 5,
         "universidad": "Complutense",
         "carrera" : "Arte y Diseño",
         "ciudad" : "Madrid",
@@ -526,38 +511,33 @@ centrosJSON = [
 
     },
     {
-        "ID": 6,
         "universidad": "Universidad de Salamanca",
         "carrera" : "Historia",
         "ciudad" : "Salamnca",
         "alumnos": 9500
     },
     {
-        "ID": 7,
-        "universidad": "ICADE",
+        "universidad": "UAM",
         "carrera" : "Economia",
         "ciudad" : "Madrid",
         "alumnos": 35000
     },
     {
-        "ID": 8,
         "universidad": "UPF",
         "carrera" : "Bioquimica",
         "ciudad" : "Barcelona",
         "alumnos": 3400
     },
     {
-        "ID": 9,
         "universidad": "Oxford",
         "carrera" : "Bussines",
         "ciudad" : "Londres",
         "alumnos": 40000
     },
     {
-        "ID": 10,
-        "universidad": "Harvard",
-        "carrera" : "Law ",
-        "ciudad" : "Cambridge",
+        "universidad": "UPM",
+        "carrera" : "Relaciones Internacionales",
+        "ciudad" : "Madrid",
         "alumnos": 40000
     }
 ]
@@ -572,7 +552,8 @@ Q7 = []
 
 if __name__ == '__main__':
     client = MongoClient()
-    
+    db = client.test.personas
+
     # db = client.test.personas
     # listaPersonas = [Persona() for i in range(10)]
     # i=0
@@ -593,25 +574,53 @@ if __name__ == '__main__':
     #     time.sleep(0.5)
     #     i += 1
 
-    db = client.test.centrosEd
-    listaCentros = [Centro() for i in range(10)]
-    i=0
-    for n in listaCentros:
-        n.init_class(db,"vars-centro_educativo.txt")
-        n.set(**centrosJSON[i])
-        n.save()
-        time.sleep(0.5)
-        i += 1
-    
-
-
-
-
-
-
+    # db = client.test.centrosEd
+    # listaCentros = [Centro() for i in range(10)]
+    # i=0
+    # for n in listaCentros:
+    #     n.init_class(db,"vars-centro_educativo.txt")
+    #     n.set(**centrosJSON[i])
+    #     n.save()
+    #     time.sleep(0.5)
+    #     i += 1
 
     # Q1 = db.find({"ciudad": "Huelva"})
 
     # print("Resultado de la Q1:")
     # for x in Q1:
+    #     print(x) 
+
+    # Q2 = db.find({ "$or" : [{"estudios.universidad" : "UPM"}, {"estudios.universidad" : "UAM"}]})
+
+    # print("Resultado de la Q2:")
+    # for x in Q2:
+    #     print(x) 
+
+    # Q3 = db.distinct("ciudad")
+
+    # print("Resultado de la Q3:")
+    # for x in Q3:
+    #     print(x) 
+
+
+    pipeline = [ 
+        {"$match" : {"estudios.universidad" : "UPM"}},
+        {"$unwind" : "$estudios"},
+        {"$match" : {"estudios.universidad" : "UPM"}},
+        {"$project" : {"uni" : "$estudios.universidad", "query": "$UPM"}},
+        {"$group" : {"_id": "$uni", "media": {"$avg" : "db.personas.count()"}}}
+    ]
+
+    Q6 = list(db.aggregate(pipeline))
+
+    print("Resultado de la Q6:")
+    for x in Q6:
+        print(x) 
+
+    # pipeline2 =[ ( {"$group": {"_id": "$estudios.universidad", "suma": {"$sum":1}}}) ]
+
+    # Q7 = list(db.aggregate(pipeline2))
+
+    # print("Resultado de la Q7:")
+    # for x in Q7:
     #     print(x) 

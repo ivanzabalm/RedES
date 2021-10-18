@@ -1,2 +1,2 @@
-ID,nombre
+nombre
 sector,ciudad,ceo
