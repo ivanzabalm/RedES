@@ -75,13 +75,13 @@ class Persona:
                 if self.__dict__.get(k) != persona[k]:
                     ins[k] = self.__dict__.get(k) # Cambia las que necesitan actualizar.
             
-            db.update_one(qr,{"$set":ins})
+            self.db.update_one(qr,{"$set":ins})
 
         if qper.count() == 0:
             ert = {}
             for we in self.__dict__.keys():
                 ert[we] = self.__dict__.get(we)
-            db.insert_one(ert) # Si no existe introduce uno nuevo.
+            self.db.insert_one(ert) # Si no existe introduce uno nuevo.
 
     def set(self, **kwargs):
         valido = True
@@ -169,13 +169,13 @@ class Empresa:
                 if self.__dict__.get(k) != empresa[k]:
                     ins[k] = self.__dict__.get(k) # Cambia las que necesitan actualizar.
             
-            db.update_one(qr,{"$set":ins})
+            self.db.update_one(qr,{"$set":ins})
 
         if qemp.count() == 0:
             ert = {}
             for we in self.__dict__.keys():
                 ert[we] = self.__dict__.get(we)
-            db.insert_one(ert) # Si no existe introduce uno nuevo.
+            self.db.insert_one(ert) # Si no existe introduce uno nuevo.
 
     def set(self, **kwargs):
         valido = True
@@ -265,13 +265,13 @@ class Centro:
                 if self.__dict__.get(k) != centro[k]:
                     ins[k] = self.__dict__.get(k) # Cambia las que necesitan actualizar.
             
-            db.update_one(qr,{"$set":ins})
+            self.db.update_one(qr,{"$set":ins})
 
         if qcen.count() == 0:
             ert = {}
             for we in self.__dict__.keys():
                 ert[we] = self.__dict__.get(we)
-            db.insert_one(ert) # Si no existe introduce uno nuevo.
+            self.db.insert_one(ert) # Si no existe introduce uno nuevo.
 
     def set(self, **kwargs):
         valido = True
@@ -333,12 +333,6 @@ class Centro:
         cls.required_vars.extend(list(set(listReqVars) - set(cls.required_vars)))
         cls.admissible_vars.extend(list(set(listAdmVars) - set(cls.admissible_vars)))
 
-
-
-
-
-
-
 personasJSON = [
     {
         "nombre": "Julian",
@@ -381,14 +375,14 @@ personasJSON = [
         "apellido": "Diéguez",
         "telefono" : 660706957,
         "ciudad" : "Huelva",
-        "estudios": {"universidad": "UAM", "inicio": "19/04/2012", "final": "24/03/2005"}
+        "estudios": {"universidad": "U-tad", "inicio": "19/04/2012", "final": "24/03/2005"}
     },
     {
         "nombre": "Alberto",
         "apellido": "Rayo",
         "telefono" : 609304424,
         "ciudad" : "Sevilla",
-        "estudios": {"universidad": "UPM", "inicio": "02/06/2002", "final": "06/11/2016"}
+        "estudios": {"universidad": "UC", "inicio": "02/06/2002", "final": "06/11/2016"}
     },
     {
         "nombre": "José",
@@ -402,7 +396,7 @@ personasJSON = [
         "apellido": "Colmenero",
         "telefono" : 669567032,
         "ciudad" : "Bilbao",
-        "estudios": {"universidad": "UAM", "inicio": "30/08/2017", "final": "15/03/2001"}
+        "estudios": {"universidad": "UV", "inicio": "30/08/2017", "final": "15/03/2001"}
     },
     {
         "nombre": "Luis",
@@ -412,7 +406,6 @@ personasJSON = [
         "estudios": {"universidad": "UAM", "inicio": "30/08/2017", "final": "15/03/2001"}
     }
 ]
-
 
 empresasJSON = [
     {
@@ -453,7 +446,7 @@ empresasJSON = [
         "ceo": "Iniesta"
     },
     {
-        "nombre": "Burguer King",
+        "nombre": "Burger King",
         "sector" : "Comida",
         "ciudad" : "Valencia",
         "ceo": "Gordo"
@@ -552,56 +545,56 @@ Q7 = []
 
 if __name__ == '__main__':
     client = MongoClient()
-    db = client.test.personas
-
-    # db = client.test.personas
-    # listaPersonas = [Persona() for i in range(10)]
-    # i=0
-    # for n in listaPersonas:
-    #     n.init_class(db,"vars-persona.txt")
-    #     n.set(**personasJSON[i])
-    #     n.save()
-    #     time.sleep(0.5)
-    #     i += 1
     
-    # db = client.test.empresas
-    # listaEmpresas = [Empresa() for i in range(10)]
-    # i=0
-    # for n in listaEmpresas:
-    #     n.init_class(db,"vars-empresa.txt")
-    #     n.set(**empresasJSON[i])
-    #     n.save()
-    #     time.sleep(0.5)
-    #     i += 1
+    db = client.test
+    listaPersonas = [Persona() for i in range(10)]
+    i=0
+    for n in listaPersonas:
+        n.init_class(db.personas,"vars-persona.txt")
+        n.set(**personasJSON[i])
+        n.save()
+        time.sleep(0.5)
+        i += 1
+    
+    listaEmpresas = [Empresa() for i in range(10)]
+    i=0
+    for n in listaEmpresas:
+        n.init_class(db.empresas,"vars-empresa.txt")
+        n.set(**empresasJSON[i])
+        n.save()
+        time.sleep(0.5)
+        i += 1
 
-    # db = client.test.centrosEd
-    # listaCentros = [Centro() for i in range(10)]
-    # i=0
-    # for n in listaCentros:
-    #     n.init_class(db,"vars-centro_educativo.txt")
-    #     n.set(**centrosJSON[i])
-    #     n.save()
-    #     time.sleep(0.5)
-    #     i += 1
+    db3 = client.test.centros
+    listaCentros = [Centro() for i in range(10)]
+    i=0
+    for n in listaCentros:
+        n.init_class(db.centros,"vars-centro_educativo.txt")
+        n.set(**centrosJSON[i])
+        n.save()
+        time.sleep(0.5)
+        i += 1
 
-    # Q1 = db.find({"ciudad": "Huelva"})
+    Q1 = db.personas.find({"ciudad": "Huelva"})
 
-    # print("Resultado de la Q1:")
-    # for x in Q1:
-    #     print(x) 
+    print("Resultado de la Q1:")
+    for x in Q1:
+        print(x)
+    print("\n")
 
-    # Q2 = db.find({ "$or" : [{"estudios.universidad" : "UPM"}, {"estudios.universidad" : "UAM"}]})
+    Q2 = db.personas.find({ "$or" : [{"estudios.universidad" : "UPM"}, {"estudios.universidad" : "UAM"}]})
 
-    # print("Resultado de la Q2:")
-    # for x in Q2:
-    #     print(x) 
+    print("Resultado de la Q2:")
+    for x in Q2:
+        print(x)
+    print("\n")
 
-    # Q3 = db.distinct("ciudad")
+    Q3 = db.personas.distinct("ciudad")
 
-    # print("Resultado de la Q3:")
-    # for x in Q3:
-    #     print(x) 
-
+    print("Resultado de la Q3:")
+    for x in Q3:
+        print(x) 
+    print("\n")
 
     pipeline = [ 
         {"$match" : {"estudios.universidad" : "UPM"}},
@@ -611,16 +604,18 @@ if __name__ == '__main__':
         {"$group" : {"_id": "$uni", "media": {"$avg" : "db.personas.count()"}}}
     ]
 
-    Q6 = list(db.aggregate(pipeline))
+    Q6 = list(db.personas.aggregate(pipeline))
 
     print("Resultado de la Q6:")
     for x in Q6:
         print(x) 
+    print("\n")
 
-    # pipeline2 =[ ( {"$group": {"_id": "$estudios.universidad", "suma": {"$sum":1}}}) ]
+    pipeline2 =[ ( {"$group": {"_id": "$estudios.universidad", "suma": {"$sum":1}}}) ]
 
-    # Q7 = list(db.aggregate(pipeline2))
+    Q7 = list(db.personas.aggregate(pipeline2))
 
-    # print("Resultado de la Q7:")
-    # for x in Q7:
-    #     print(x) 
+    print("Resultado de la Q7:")
+    for x in Q7:
+        print(x)
+    print("\n")
