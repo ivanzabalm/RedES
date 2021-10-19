@@ -334,205 +334,42 @@ class Centro:
         cls.admissible_vars.extend(list(set(listAdmVars) - set(cls.admissible_vars)))
 
 personasJSON = [
-    {
-        "nombre": "Julian",
-        "apellido": "Fernandez",
-        "telefono" : 674165642,
-        "ciudad" : "Paris",
-        "estudios": {"universidad": "UPM", "inicio": "19/04/2012", "final": "24/03/2005"}
-    },
-    {
-        "nombre": "Sergio",
-        "apellido": "Diaz",
-        "telefono" : 619421988,
-        "ciudad" : "Huelva",
-        "estudios": {"universidad": "UAM", "inicio": "23/05/2001", "final": "24/08/2005"}
-    },
-    {
-        "nombre": "Javier",
-        "apellido": "Cortes",
-        "telefono" : 669197778,
-        "ciudad" : "Santander",
-        "estudios": {"universidad": "U-tad", "inicio": "30/08/2000", "final": "09/11/2010"}
-    },
-    {
-        "nombre": "Carmen",
-        "apellido": "Cortes",
-        "telefono" : 629755914,
-        "ciudad" : "Huelva",
-        "estudios": {"universidad": "UPM", "inicio": "19/04/2012", "final": "24/03/2005"}
-    },
-    {
-        "nombre": "Alberto",
-        "apellido": "Rayo",
-        "telefono" : 685646527,
-        "ciudad" : "Santander",
-        "estudios": {"universidad": "UAM", "inicio": "19/04/2012", "final": "24/03/2005"}
-
-    },
-    {
-        "nombre": "Pedro",
-        "apellido": "Diéguez",
-        "telefono" : 660706957,
-        "ciudad" : "Huelva",
-        "estudios": {"universidad": "U-tad", "inicio": "19/04/2012", "final": "24/03/2005"}
-    },
-    {
-        "nombre": "Alberto",
-        "apellido": "Rayo",
-        "telefono" : 609304424,
-        "ciudad" : "Sevilla",
-        "estudios": {"universidad": "UC", "inicio": "02/06/2002", "final": "06/11/2016"}
-    },
-    {
-        "nombre": "José",
-        "apellido": "Hernández",
-        "telefono" : 693401628,
-        "ciudad" : "Santander",
-        "estudios": {"universidad": "UAM", "inicio": "12/08/2009", "final": "18/07/2011"}
-    },
-    {
-        "nombre": "Teresa",
-        "apellido": "Colmenero",
-        "telefono" : 669567032,
-        "ciudad" : "Bilbao",
-        "estudios": {"universidad": "UV", "inicio": "30/08/2017", "final": "15/03/2001"}
-    },
-    {
-        "nombre": "Luis",
-        "apellido": "Izquierdo",
-        "telefono" : 691999884,
-        "ciudad" : "Bilbao",
-        "estudios": {"universidad": "UAM", "inicio": "30/08/2017", "final": "15/03/2001"}
-    }
+    {"nombre": "Julian","apellido": "Fernandez","telefono" : 674165642,"ciudad" : "Paris","estudios": {"universidad": "UPM", "inicio": "19/04/2012", "final": "24/03/2005"}},
+    {"nombre": "Sergio","apellido": "Diaz","telefono" : 619421988,"ciudad" : "Huelva","estudios": {"universidad": "UAM", "inicio": "23/05/2001", "final": "24/08/2005"}},
+    {"nombre": "Javier","apellido": "Cortes","telefono" : 669197778,"ciudad" : "Santander","estudios": {"universidad": "U-tad", "inicio": "30/08/2000", "final": "09/11/2010"}},
+    {"nombre": "Carmen","apellido": "Cortes","telefono" : 629755914,"ciudad" : "Huelva","estudios": {"universidad": "UPM", "inicio": "19/04/2012", "final": "24/03/2005"}},
+    {"nombre": "Alberto","apellido": "Rayo","telefono" : 685646527,"ciudad" : "Santander","estudios": {"universidad": "UAM", "inicio": "19/04/2012", "final": "24/03/2005"}},
+    {"nombre": "Pedro","apellido": "Diéguez","telefono" : 660706957,"ciudad" : "Huelva","estudios": {"universidad": "U-tad", "inicio": "19/04/2012", "final": "24/03/2005"}},
+    {"nombre": "Alberto","apellido": "Rayo","telefono" : 609304424,"ciudad" : "Sevilla","estudios": {"universidad": "U-tad", "inicio": "02/06/2002", "final": "06/11/2016"}},
+    {"nombre": "José","apellido": "Hernández","telefono" : 693401628,"ciudad" : "Santander","estudios": {"universidad": "UAM", "inicio": "12/08/2009", "final": "18/07/2011"}},
+    {"nombre": "Teresa","apellido": "Colmenero","telefono" : 669567032,"ciudad" : "Bilbao","estudios": {"universidad": "UV", "inicio": "30/08/2017", "final": "15/03/2001"}},
+    {"nombre": "Luis","apellido": "Izquierdo","telefono" : 691999884,"ciudad" : "Bilbao","estudios": {"universidad": "UAM", "inicio": "30/08/2017", "final": "15/03/2001"}}
 ]
 
 empresasJSON = [
-    {
-        "nombre": "McDonalds",
-        "sector" : "Comida",
-        "ciudad" : "Madrid",
-        "ceo": "Sech"
-    },
-    {
-        "nombre": "Nike",
-        "sector" : "Ropa",
-        "ciudad" : "Barcelona",
-        "ceo": "Myke"
-    },
-    {
-        "nombre": "Adidas",
-        "sector" : "Ropa",
-        "ciudad" : "Alicante",
-        "ceo": "Ivan"
-    },
-    {
-        "nombre": "Apple",
-        "sector" : "Tecnologia",
-        "ciudad" : "Paris",
-        "ceo": "Steve"
-    },
-    {
-        "nombre": "Samsung",
-        "sector" : "Tecnologia",
-        "ciudad" : "Sevilla",
-        "ceo": "Xokas"
-
-    },
-    {
-        "nombre": "FIFA",
-        "sector" : "Deporte",
-        "ciudad" : "Londres",
-        "ceo": "Iniesta"
-    },
-    {
-        "nombre": "Burger King",
-        "sector" : "Comida",
-        "ciudad" : "Valencia",
-        "ceo": "Gordo"
-    },
-    {
-        "nombre": "Riot Games",
-        "sector" : "Videojuegos",
-        "ciudad" : "Roma",
-        "ceo": "Teemo"
-    },
-    {
-        "nombre": "JBL",
-        "sector" : "Musica",
-        "ciudad" : "Amsterdam",
-        "ceo": "Stormzy"
-    },
-    {
-        "nombre": "BOSE",
-        "sector" : "Musica",
-        "ciudad" : "Brasil",
-        "ceo": "Miguel"
-    }
+    {"nombre": "McDonalds","sector" : "Comida","ciudad" : "Madrid","ceo": "Sech"},
+    {"nombre": "Nike","sector" : "Ropa","ciudad" : "Barcelona","ceo": "Myke"},
+    {"nombre": "Adidas","sector" : "Ropa","ciudad" : "Alicante","ceo": "Ivan"},
+    {"nombre": "Apple","sector" : "Tecnologia","ciudad" : "Paris","ceo": "Steve"},
+    {"nombre": "Samsung","sector" : "Tecnologia","ciudad" : "Sevilla","ceo": "Xokas"},
+    {"nombre": "FIFA","sector" : "Deporte","ciudad" : "Londres","ceo": "Iniesta"},
+    {"nombre": "Burger King","sector" : "Comida","ciudad" : "Valencia","ceo": "Gordo"},
+    {"nombre": "Riot Games","sector" : "Videojuegos","ciudad" : "Roma","ceo": "Teemo"},
+    {"nombre": "JBL","sector" : "Musica","ciudad" : "Amsterdam","ceo": "Stormzy"},
+    {"nombre": "BOSE","sector" : "Musica","ciudad" : "Brasil","ceo": "Miguel"}
 ]
 
 centrosJSON = [
-    {
-        "universidad": "U-tad",
-        "carrera" : "INSO",
-        "ciudad" : "Madrid",
-        "alumnos": 15890
-    },
-    {
-        "universidad": "CEU",
-        "carrera" : "ADE",
-        "ciudad" : "Madrid",
-        "alumnos": 32341
-    },
-    {
-        "universidad": "UA",
-        "carrera" : "Derecho",
-        "ciudad" : "Alicante",
-        "alumnos": 20000
-    },
-    {
-        "universidad": "UV",
-        "carrera" : "Arquitectura",
-        "ciudad" : "Valencia",
-        "alumnos": 64483
-    },
-    {
-        "universidad": "Complutense",
-        "carrera" : "Arte y Diseño",
-        "ciudad" : "Madrid",
-        "alumnos": 87832
-
-    },
-    {
-        "universidad": "Universidad de Salamanca",
-        "carrera" : "Historia",
-        "ciudad" : "Salamnca",
-        "alumnos": 9500
-    },
-    {
-        "universidad": "UAM",
-        "carrera" : "Economia",
-        "ciudad" : "Madrid",
-        "alumnos": 35000
-    },
-    {
-        "universidad": "UPF",
-        "carrera" : "Bioquimica",
-        "ciudad" : "Barcelona",
-        "alumnos": 3400
-    },
-    {
-        "universidad": "Oxford",
-        "carrera" : "Bussines",
-        "ciudad" : "Londres",
-        "alumnos": 40000
-    },
-    {
-        "universidad": "UPM",
-        "carrera" : "Relaciones Internacionales",
-        "ciudad" : "Madrid",
-        "alumnos": 40000
-    }
+    {"universidad": "U-tad","carrera" : "INSO","ciudad" : "Madrid","alumnos": 15890},
+    {"universidad": "CEU","carrera" : "ADE","ciudad" : "Madrid","alumnos": 32341},
+    {"universidad": "UA","carrera" : "Derecho","ciudad" : "Alicante","alumnos": 20000},
+    {"universidad": "UV","carrera" : "Arquitectura","ciudad" : "Valencia","alumnos": 64483},
+    {"universidad": "Complutense","carrera" : "Arte y Diseño","ciudad" : "Madrid","alumnos": 87832},
+    {"universidad": "Universidad de Salamanca","carrera" : "Historia","ciudad" : "Salamnca","alumnos": 9500},
+    {"universidad": "UAM","carrera" : "Economia","ciudad" : "Madrid","alumnos": 35000},
+    {"universidad": "UPF","carrera" : "Bioquimica","ciudad" : "Barcelona","alumnos": 3400},
+    {"universidad": "Oxford","carrera" : "Bussines","ciudad" : "Londres","alumnos": 40000},
+    {"universidad": "UPM","carrera" : "Relaciones Internacionales","ciudad" : "Madrid","alumnos": 40000}
 ]
 
 Q1 = []
@@ -553,7 +390,7 @@ if __name__ == '__main__':
         n.init_class(db.personas,"vars-persona.txt")
         n.set(**personasJSON[i])
         n.save()
-        time.sleep(0.5)
+        time.sleep(0.25)
         i += 1
     
     listaEmpresas = [Empresa() for i in range(10)]
@@ -562,7 +399,7 @@ if __name__ == '__main__':
         n.init_class(db.empresas,"vars-empresa.txt")
         n.set(**empresasJSON[i])
         n.save()
-        time.sleep(0.5)
+        time.sleep(0.25)
         i += 1
 
     db3 = client.test.centros
@@ -572,7 +409,7 @@ if __name__ == '__main__':
         n.init_class(db.centros,"vars-centro_educativo.txt")
         n.set(**centrosJSON[i])
         n.save()
-        time.sleep(0.5)
+        time.sleep(0.25)
         i += 1
 
     Q1 = db.personas.find({"ciudad": "Huelva"})
@@ -611,7 +448,10 @@ if __name__ == '__main__':
         print(x) 
     print("\n")
 
-    pipeline2 =[ ( {"$group": {"_id": "$estudios.universidad", "suma": {"$sum":1}}}) ]
+    pipeline2 =[ 
+        {"$group": {"_id": "$estudios.universidad", "suma": {"$sum":1} }},
+        {"$sort": {"suma": -1}},
+        {"$limit": 3}]
 
     Q7 = list(db.personas.aggregate(pipeline2))
 
