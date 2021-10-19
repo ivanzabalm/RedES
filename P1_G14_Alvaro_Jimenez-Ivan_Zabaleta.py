@@ -433,6 +433,17 @@ if __name__ == '__main__':
         print(x) 
     print("\n")
 
+    pipeline3 = [{"$match" : {"estudios.final" : {"$lte" : "2017-01-01"}}},{"$group": {"_id":"$nombre"}},{"$out": {"db" : "test", "coll": "query5"}}]
+    Q5 = list(db.personas.aggregate(pipeline3))
+
+    quer5 = db.query5.find()
+
+    print("Resultado de la Q5:")
+    for x in quer5:
+        print(x)
+    print("\n")
+    
+    
     pipeline = [ 
         {"$match" : {"estudios.universidad" : "UPM"}},
         {"$unwind" : "$estudios"},
