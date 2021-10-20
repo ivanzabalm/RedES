@@ -332,14 +332,14 @@ class Centro:
         cls.admissible_vars.extend(list(set(listAdmVars) - set(cls.admissible_vars)))
 
 personasJSON = [
-    {"nombre": "Julian","apellido": "Fernandez","telefono" : 674165642,"ciudad" : "Paris","estudios": {"universidad": "UPM", "inicio": "2005-03-24", "final": "2012-04-19"}},
-    {"nombre": "Sergio","apellido": "Diaz","telefono" : 619421988,"ciudad" : "Huelva","estudios": {"universidad": "UAM", "inicio": "2001-05-23", "final": "2005-08-24"}},
-    {"nombre": "Javier","apellido": "Cortes","telefono" : 669197778,"ciudad" : "Santander","estudios": {"universidad": "U-tad", "inicio": "2000-08-30", "final": "2010-09-11"}},
+    {"nombre": "Julian","apellido": "Fernandez","telefono" : 674165642,"ciudad" : "Paris","estudios": {"universidad": "UPM", "inicio": "2005-03-24", "final": "2012-04-19", "numEstudios" : 3}, "trabajo": "UPM"},
+    {"nombre": "Sergio","apellido": "Diaz","telefono" : 619421988,"ciudad" : "Huelva","estudios": {"universidad": "UAM", "inicio": "2001-05-23", "final": "2005-08-24", "numEstudios" : 4},"trabajo": "UPM"},
+    {"nombre": "Javier","apellido": "Cortes","telefono" : 669197778,"ciudad" : "Santander","estudios": {"universidad": "U-tad", "inicio": "2000-08-30", "final": "2010-09-11", "numEstudios" : 1},"trabajo": "UPM"},
     {"nombre": "Carmen","apellido": "Cortes","telefono" : 629755914,"ciudad" : "Huelva","estudios": {"universidad": "UPM", "inicio": "2005-24-03", "final": "2012-04-19"}},
     {"nombre": "Alberto","apellido": "Rayo","telefono" : 685646527,"ciudad" : "Santander","estudios": {"universidad": "UAM", "inicio": "2005-03-24", "final": "2012-04-19"}},
-    {"nombre": "Pedro","apellido": "Diéguez","telefono" : 660706957,"ciudad" : "Huelva","estudios": {"universidad": "U-tad", "inicio": "2005-03-24", "final": "2012-19-04"}},
+    {"nombre": "Pedro","apellido": "Diéguez","telefono" : 660706957,"ciudad" : "Huelva","estudios": {"universidad": "U-tad", "inicio": "2005-03-24", "final": "2012-19-04", "numEstudios" : 2},"trabajo": "UPM"},
     {"nombre": "Alberto","apellido": "Rayo","telefono" : 609304424,"ciudad" : "Sevilla","estudios": {"universidad": "U-tad", "inicio": "2002-06-02", "final": "2016-06-11"}},
-    {"nombre": "José","apellido": "Hernández","telefono" : 693401628,"ciudad" : "Santander","estudios": {"universidad": "UAM", "inicio": "2009-12-08", "final": "2018-07-18"}},
+    {"nombre": "José","apellido": "Hernández","telefono" : 693401628,"ciudad" : "Santander","estudios": {"universidad": "UAM", "inicio": "2009-12-08", "final": "2018-07-18", "numEstudios" : 3},"trabajo": "UPM"},
     {"nombre": "Teresa","apellido": "Colmenero","telefono" : 669567032,"ciudad" : "Bilbao","estudios": {"universidad": "UV", "inicio": "2001-03-15", "final": "2017-08-30"}},
     {"nombre": "Luis","apellido": "Izquierdo","telefono" : 691999884,"ciudad" : "Bilbao","estudios": {"universidad": "UAM", "inicio": "2001-03-15", "final": "2017-08-30"}}
 ]
@@ -448,11 +448,11 @@ if __name__ == '__main__':
         print(x)
     print("\n")
     
-    num = db.personas.count()
+    num = db.personas.find({"trabajo" : "UPM"}).count()
+    
     pipeline = [ 
-        {"$match" : {"estudios.universidad" : "UPM"}},
-        {"$count" : "Num_UPM"},
-        {"$project": {"average" : {"$divide": ["$Num_UPM", num]}}}
+        {"$group": {"_id" : "Null", "Num_Trab" : {"$sum" : "$estudios.numEstudios"}}},
+        {"$project": {"average" : {"$divide": [ "$Num_Trab", num]}}}
                 
     ]
 
