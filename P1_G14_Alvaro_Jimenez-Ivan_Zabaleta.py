@@ -111,7 +111,7 @@ class Persona:
                             self.__dict__[n] = kwargs[n]
 
             # Añadimos el geoJson de tipo punto al documento
-            self.__dict__["geolocalizacion"] = getCityGeoJSON(self.__dict__.get("ciudad"))
+            # self.__dict__["geolocalizacion"] = getCityGeoJSON(self.__dict__.get("ciudad"))
 
     @classmethod
     def find(cls, query):
