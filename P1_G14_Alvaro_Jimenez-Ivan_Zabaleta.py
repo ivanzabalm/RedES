@@ -448,15 +448,15 @@ if __name__ == '__main__':
         print(x)
     print("\n")
     
+    num = db.personas.count()
     pipeline = [ 
         {"$match" : {"estudios.universidad" : "UPM"}},
-        {"$unwind" : "$estudios"},
-        {"$match" : {"estudios.universidad" : "UPM"}},
-        {"$project" : {"uni" : "$estudios.universidad", "query": "$UPM"}},
-        {"$group" : {"_id": "$uni", "media": {"$avg" : "db.personas.count()"}}}
+        {"$count" : "Num_UPM"},
+        {"$project": {"average" : {"$divide": ["$Num_UPM", num]}}}
+                
     ]
 
-    Q6 = list(db.personas.aggregate(pipeline))
+    Q6 = db.personas.aggregate(pipeline)
 
     print("Resultado de la Q6:")
     for x in Q6:
