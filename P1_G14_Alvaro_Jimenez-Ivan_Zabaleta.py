@@ -1,8 +1,7 @@
 __author__ = 'Alvaro_Jimenez_&_Ivan_Zabaleta'
 
 import time
-from pymongo import MongoClient
-from pymongo.command_cursor import CommandCursor
+from pymongo import MongoClient, command_cursor
 from geojson import Point
 
 def getCityGeoJSON(address):
@@ -36,7 +35,6 @@ class ModelCursor:
         """
         self.clase = model_class
         self.cursor = command_cursor
-        
     
     def next(self):
         """ Devuelve el siguiente documento en forma de modelo
@@ -213,7 +211,7 @@ class Empresa:
     def find(cls, query):
         """ Devuelve un cursor de modelos        
         """ 
-        return ModelCursor(cls,cls.db.find(query))
+        return ModelCursor(cls,cls.find(query))
 
     @classmethod
     def init_class(cls, db, vars_path="vars-empresa.txt"):
@@ -309,7 +307,7 @@ class Centro:
     def find(cls, query):
         """ Devuelve un cursor de modelos        
         """ 
-        return ModelCursor(cls,cls.db.find(query))
+        return ModelCursor(cls,cls.find(query))
 
     @classmethod
     def init_class(cls, db, vars_path="vars-centro_educativo.txt"):
@@ -334,16 +332,16 @@ class Centro:
         cls.admissible_vars.extend(list(set(listAdmVars) - set(cls.admissible_vars)))
 
 personasJSON = [
-    {"nombre": "Julian","apellido": "Fernandez","telefono" : 674165642,"ciudad" : "Paris","estudios": {"universidad": "UPM", "inicio": "19/04/2012", "final": "24/03/2005"}},
-    {"nombre": "Sergio","apellido": "Diaz","telefono" : 619421988,"ciudad" : "Huelva","estudios": {"universidad": "UAM", "inicio": "23/05/2001", "final": "24/08/2005"}},
-    {"nombre": "Javier","apellido": "Cortes","telefono" : 669197778,"ciudad" : "Santander","estudios": {"universidad": "U-tad", "inicio": "30/08/2000", "final": "09/11/2010"}},
-    {"nombre": "Carmen","apellido": "Cortes","telefono" : 629755914,"ciudad" : "Huelva","estudios": {"universidad": "UPM", "inicio": "19/04/2012", "final": "24/03/2005"}},
-    {"nombre": "Alberto","apellido": "Rayo","telefono" : 685646527,"ciudad" : "Santander","estudios": {"universidad": "UAM", "inicio": "19/04/2012", "final": "24/03/2005"}},
-    {"nombre": "Pedro","apellido": "Diéguez","telefono" : 660706957,"ciudad" : "Huelva","estudios": {"universidad": "U-tad", "inicio": "19/04/2012", "final": "24/03/2005"}},
-    {"nombre": "Alberto","apellido": "Rayo","telefono" : 609304424,"ciudad" : "Sevilla","estudios": {"universidad": "U-tad", "inicio": "02/06/2002", "final": "06/11/2016"}},
-    {"nombre": "José","apellido": "Hernández","telefono" : 693401628,"ciudad" : "Santander","estudios": {"universidad": "UAM", "inicio": "12/08/2009", "final": "18/07/2011"}},
-    {"nombre": "Teresa","apellido": "Colmenero","telefono" : 669567032,"ciudad" : "Bilbao","estudios": {"universidad": "UV", "inicio": "30/08/2017", "final": "15/03/2001"}},
-    {"nombre": "Luis","apellido": "Izquierdo","telefono" : 691999884,"ciudad" : "Bilbao","estudios": {"universidad": "UAM", "inicio": "30/08/2017", "final": "15/03/2001"}}
+    {"nombre": "Julian","apellido": "Fernandez","telefono" : 674165642,"ciudad" : "Paris","estudios": {"universidad": "UPM", "inicio": "2005-03-24", "final": "2012-04-19"}},
+    {"nombre": "Sergio","apellido": "Diaz","telefono" : 619421988,"ciudad" : "Huelva","estudios": {"universidad": "UAM", "inicio": "2001-05-23", "final": "2005-08-24"}},
+    {"nombre": "Javier","apellido": "Cortes","telefono" : 669197778,"ciudad" : "Santander","estudios": {"universidad": "U-tad", "inicio": "2000-08-30", "final": "2010-09-11"}},
+    {"nombre": "Carmen","apellido": "Cortes","telefono" : 629755914,"ciudad" : "Huelva","estudios": {"universidad": "UPM", "inicio": "2005-24-03", "final": "2012-04-19"}},
+    {"nombre": "Alberto","apellido": "Rayo","telefono" : 685646527,"ciudad" : "Santander","estudios": {"universidad": "UAM", "inicio": "2005-03-24", "final": "2012-04-19"}},
+    {"nombre": "Pedro","apellido": "Diéguez","telefono" : 660706957,"ciudad" : "Huelva","estudios": {"universidad": "U-tad", "inicio": "2005-03-24", "final": "2012-19-04"}},
+    {"nombre": "Alberto","apellido": "Rayo","telefono" : 609304424,"ciudad" : "Sevilla","estudios": {"universidad": "U-tad", "inicio": "2002-06-02", "final": "2016-06-11"}},
+    {"nombre": "José","apellido": "Hernández","telefono" : 693401628,"ciudad" : "Santander","estudios": {"universidad": "UAM", "inicio": "2009-12-08", "final": "2018-07-18"}},
+    {"nombre": "Teresa","apellido": "Colmenero","telefono" : 669567032,"ciudad" : "Bilbao","estudios": {"universidad": "UV", "inicio": "2001-03-15", "final": "2017-08-30"}},
+    {"nombre": "Luis","apellido": "Izquierdo","telefono" : 691999884,"ciudad" : "Bilbao","estudios": {"universidad": "UAM", "inicio": "2001-03-15", "final": "2017-08-30"}}
 ]
 
 empresasJSON = [
@@ -382,8 +380,8 @@ Q7 = []
 
 if __name__ == '__main__':
     client = MongoClient()
-    
     db = client.test
+
     listaPersonas = [Persona() for i in range(10)]
     i=0
     for n in listaPersonas:
@@ -402,7 +400,6 @@ if __name__ == '__main__':
         time.sleep(0.25)
         i += 1
 
-    db3 = client.test.centros
     listaCentros = [Centro() for i in range(10)]
     i=0
     for n in listaCentros:
@@ -412,29 +409,37 @@ if __name__ == '__main__':
         time.sleep(0.25)
         i += 1
 
-    Q1 = db.personas.find({"ciudad": "Huelva"})
-
+    Q1 = listaPersonas[0].find({"ciudad": "Huelva"})
     print("Resultado de la Q1:")
-    for x in Q1:
-        print(x)
+    while Q1.alive:
+        print(Q1.next().__dict__)
     print("\n")
 
-    Q2 = db.personas.find({ "$or" : [{"estudios.universidad" : "UPM"}, {"estudios.universidad" : "UAM"}]})
-
+    Q2 = listaPersonas[0].find({ "$or" : [{"estudios.universidad" : "UPM"}, {"estudios.universidad" : "UAM"}]})
     print("Resultado de la Q2:")
-    for x in Q2:
-        print(x)
+    while Q2.alive:
+        print(Q2.next().__dict__)
     print("\n")
 
     Q3 = db.personas.distinct("ciudad")
-
     print("Resultado de la Q3:")
     for x in Q3:
         print(x) 
     print("\n")
 
-    pipeline3 = [{"$match" : {"estudios.final" : {"$lte" : "2017-01-01"}}},{"$group": {"_id":"$nombre"}},{"$out": {"db" : "test", "coll": "query5"}}]
-    Q5 = list(db.personas.aggregate(pipeline3))
+    """
+    pipeline = [{"location" : {"geolocalizacion" : {"$near" : {"$geometry": { type: "Point",  "coordinates": [ -73.9667, 40.78 ] }}}}}]   
+    Q4 = list(db.personas.aggregate(pipeline))
+
+    print("Resultado de la Q4:")
+    for x in Q4:
+        print(x) 
+    print("\n")
+    """
+
+    pipeline = [{"$match" : {"estudios.final" : {"$gte" : "2017-01-01"}}},{"$group": {"_id":"$nombre"}},{"$out": {"db" : "test", "coll": "query5"}}]
+    
+    Q5 = list(db.personas.aggregate(pipeline))
 
     quer5 = db.query5.find()
 
@@ -442,7 +447,6 @@ if __name__ == '__main__':
     for x in quer5:
         print(x)
     print("\n")
-    
     
     pipeline = [ 
         {"$match" : {"estudios.universidad" : "UPM"}},
@@ -459,14 +463,16 @@ if __name__ == '__main__':
         print(x) 
     print("\n")
 
-    pipeline2 =[ 
+    pipeline =[ 
         {"$group": {"_id": "$estudios.universidad", "suma": {"$sum":1} }},
         {"$sort": {"suma": -1}},
         {"$limit": 3}]
 
-    Q7 = list(db.personas.aggregate(pipeline2))
+    Q7 = list(db.personas.aggregate(pipeline))
 
     print("Resultado de la Q7:")
     for x in Q7:
         print(x)
     print("\n")
+
+
