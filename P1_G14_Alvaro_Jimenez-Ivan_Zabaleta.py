@@ -1,7 +1,7 @@
 __author__ = 'Alvaro_Jimenez_&_Ivan_Zabaleta'
 
 import time
-from pymongo import MongoClient, command_cursor
+from pymongo import MongoClient, GEO2D
 from geojson import Point
 
 def getCityGeoJSON(address):
@@ -111,7 +111,7 @@ class Persona:
                             self.__dict__[n] = kwargs[n]
 
             # Añadimos el geoJson de tipo punto al documento
-            # self.__dict__["geolocalizacion"] = getCityGeoJSON(self.__dict__.get("ciudad"))
+            self.__dict__["geolocalizacion"] = getCityGeoJSON(self.__dict__.get("ciudad"))
 
     @classmethod
     def find(cls, query):
@@ -203,9 +203,6 @@ class Empresa:
                                 self.__dict__[n] = kwargs[n]
                         else:
                             self.__dict__[n] = kwargs[n]
-
-            # Añadimos el geoJson de tipo punto al documento
-            #self.__dict__["geolocalizacion"] = getCityGeoJSON(self.__dict__.get("ciudad"))
 
     @classmethod
     def find(cls, query):
@@ -300,9 +297,6 @@ class Centro:
                         else:
                             self.__dict__[n] = kwargs[n]
 
-            # Añadimos el geoJson de tipo punto al documento
-            #self.__dict__["geolocalizacion"] = getCityGeoJSON(self.__dict__.get("ciudad"))
-
     @classmethod
     def find(cls, query):
         """ Devuelve un cursor de modelos        
@@ -384,20 +378,21 @@ if __name__ == '__main__':
 
     listaPersonas = [Persona() for i in range(10)]
     i=0
+
+    db.personas.create_index([("geolocalizacion.coordinates", GEO2D)])
     for n in listaPersonas:
         n.init_class(db.personas,"vars-persona.txt")
         n.set(**personasJSON[i])
         n.save()
         time.sleep(0.25)
         i += 1
-    
+
     listaEmpresas = [Empresa() for i in range(10)]
     i=0
     for n in listaEmpresas:
         n.init_class(db.empresas,"vars-empresa.txt")
         n.set(**empresasJSON[i])
         n.save()
-        time.sleep(0.25)
         i += 1
 
     listaCentros = [Centro() for i in range(10)]
@@ -406,7 +401,6 @@ if __name__ == '__main__':
         n.init_class(db.centros,"vars-centro_educativo.txt")
         n.set(**centrosJSON[i])
         n.save()
-        time.sleep(0.25)
         i += 1
 
     Q1 = listaPersonas[0].find({"ciudad": "Huelva"})
@@ -427,20 +421,14 @@ if __name__ == '__main__':
         print(x) 
     print("\n")
 
-    """
-    pipeline = [{"location" : {"geolocalizacion" : {"$near" : {"$geometry": { type: "Point",  "coordinates": [ -73.9667, 40.78 ] }}}}}]   
-    Q4 = list(db.personas.aggregate(pipeline))
-
+    Q4 = listaPersonas[0].find({"geolocalizacion.coordinates" : {"$near" : [ -73.9667, 40.78 ]}})
     print("Resultado de la Q4:")
-    for x in Q4:
-        print(x) 
+    while Q4.alive:
+        print(Q4.next().__dict__)
     print("\n")
-    """
 
-    pipeline = [{"$match" : {"estudios.final" : {"$gte" : "2017-01-01"}}},{"$group": {"_id":"$nombre"}},{"$out": {"db" : "test", "coll": "query5"}}]
-    
+    pipeline = [{"$match" : {"estudios.final" : {"$gte" : "2017-01-01"}}},{"$group": {"_id":"$nombre"}},{"$out": {"db" : "test", "coll": "query5"}}]    
     Q5 = list(db.personas.aggregate(pipeline))
-
     quer5 = db.query5.find()
 
     print("Resultado de la Q5:")
@@ -449,13 +437,10 @@ if __name__ == '__main__':
     print("\n")
     
     num = db.personas.find({"trabajo" : "UPM"}).count()
-    
     pipeline = [ 
         {"$group": {"_id" : "Null", "Num_Trab" : {"$sum" : "$estudios.numEstudios"}}},
-        {"$project": {"average" : {"$divide": [ "$Num_Trab", num]}}}
-                
+        {"$project": {"_id": 0, "average" : {"$divide": [ "$Num_Trab", num]}}}         
     ]
-
     Q6 = db.personas.aggregate(pipeline)
 
     print("Resultado de la Q6:")
@@ -474,5 +459,3 @@ if __name__ == '__main__':
     for x in Q7:
         print(x)
     print("\n")
-
-
